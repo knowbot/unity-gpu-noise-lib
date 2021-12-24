@@ -1,0 +1,99 @@
+#pragma kernel heightmap_perlin2d
+#pragma kernel heightmap_perlin3d
+#pragma kernel heightmap_perlin4d
+#pragma kernel heightmap_simplex2d
+#pragma kernel heightmap_simplex3d
+#pragma kernel heightmap_simplex4d
+#include "NoiseFunctions.cginc"
+
+RWStructuredBuffer<float3> vertex_buffer;
+int x_size, z_size;
+
+float multiplier, octaves, lacunarity, gain, amplitude, frequency, scale, exponent;
+float4 offset;
+float local_offset_x, local_offset_z;
+
+[numthreads(32,1,1)]
+void heightmap_perlin2d (const uint3 id : SV_DispatchThreadID)
+{
+    float3 pos = vertex_buffer[id.x];
+    // we constrain the input coordinates to a 0/1 interval, and then we subtract 0.5 to make sure the origin of the
+    // grid corresponds to the center of the mesh UV
+    const float2 input = float2(pos.x/x_size - 0.5, pos.z/z_size - 0.5)
+    + offset.xy
+    + float2(local_offset_x, local_offset_z);
+    const fbm_settings settings = make_fbm_settings(multiplier, octaves, lacunarity, gain, amplitude, frequency, scale, exponent);
+    pos.y = fbm_noise::gen(perlin_noise::gen(), settings).compute(input);
+    vertex_buffer[id.x].y = pos.y * 20;
+}
+
+[numthreads(32,1,1)]
+void heightmap_perlin3d (const uint3 id : SV_DispatchThreadID)
+{
+    float3 pos = vertex_buffer[id.x];
+    // we constrain the input coordinates to a 0/1 interval, and then we subtract 0.5 to make sure the origin of the
+    // grid corresponds to the center of the mesh UV
+    const float3 input = float3(pos.x/x_size - 0.5, pos.z/z_size - 0.5, 0)
+    + offset.xyz
+    + float3(local_offset_x, local_offset_z, 0);
+    const fbm_settings settings = make_fbm_settings(multiplier, octaves, lacunarity, gain, amplitude, frequency, scale, exponent);
+    pos.y = fbm_noise::gen(perlin_noise::gen(), settings).compute(input);
+    vertex_buffer[id.x].y = pos.y;
+}
+
+[numthreads(32,1,1)]
+void heightmap_perlin4d (const uint3 id : SV_DispatchThreadID)
+{
+    float3 pos = vertex_buffer[id.x];
+    // we constrain the input coordinates to a 0/1 interval, and then we subtract 0.5 to make sure the origin of the
+    // grid corresponds to the center of the mesh UV
+    const float4 input = float4(pos.x/x_size - 0.5, pos.z/z_size - 0.5, 0, 0)
+    + offset
+    + float4(local_offset_x, local_offset_z, 0, 0);
+    const fbm_settings settings = make_fbm_settings(multiplier, octaves, lacunarity, gain, amplitude, frequency, scale, exponent);
+    pos.y = fbm_noise::gen(perlin_noise::gen(), settings).compute(input);
+    vertex_buffer[id.x].y = pos.y;
+}
+
+[numthreads(32,1,1)]
+void heightmap_simplex2d (const uint3 id : SV_DispatchThreadID)
+{
+    float3 pos = vertex_buffer[id.x];
+    // we constrain the input coordinates to a 0/1 interval, and then we subtract 0.5 to make sure the origin of the
+    // grid corresponds to the center of the mesh UV
+    const float2 input = float2(pos.x/x_size - 0.5, pos.z/z_size - 0.5)
+    + offset.xy
+    + float2(local_offset_x, local_offset_z);
+    const fbm_settings settings = make_fbm_settings(multiplier, octaves, lacunarity, gain, amplitude, frequency, scale, exponent);
+    pos.y = fbm_noise::gen(simplex_noise::gen(), settings).compute(input);
+    vertex_buffer[id.x].y = pos.y;
+}
+
+[numthreads(32,1,1)]
+void heightmap_simplex3d (const uint3 id : SV_DispatchThreadID)
+{
+    float3 pos = vertex_buffer[id.x];
+    // we constrain the input coordinates to a 0/1 interval, and then we subtract 0.5 to make sure the origin of the
+    // grid corresponds to the center of the mesh UV
+    const float3 input = float3(pos.x/x_size - 0.5, pos.z/z_size - 0.5, 0)
+    + offset.xyz
+    + float3(local_offset_x, local_offset_z, 0);
+    const fbm_settings settings = make_fbm_settings(multiplier, octaves, lacunarity, gain, amplitude, frequency, scale, exponent);
+    pos.y = fbm_noise::gen(simplex_noise::gen(), settings).compute(input);
+    vertex_buffer[id.x].y = pos.y;
+}
+
+[numthreads(32,1,1)]
+void heightmap_simplex4d (const uint3 id : SV_DispatchThreadID)
+{
+    float3 pos = vertex_buffer[id.x];
+    // we constrain the input coordinates to a 0/1 interval, and then we subtract 0.5 to make sure the origin of the
+    // grid corresponds to the center of the mesh UV
+    const float4 input = float4(pos.x/x_size - 0.5, pos.z/z_size - 0.5, 0, 0)
+    + offset
+    + float4(local_offset_x, local_offset_z, 0, 0);
+    const fbm_settings settings = make_fbm_settings(multiplier, octaves, lacunarity, gain, amplitude, frequency, scale, exponent);
+    pos.y = fbm_noise::gen(simplex_noise::gen(), settings).compute(input);
+    vertex_buffer[id.x].y = pos.y;
+}
+

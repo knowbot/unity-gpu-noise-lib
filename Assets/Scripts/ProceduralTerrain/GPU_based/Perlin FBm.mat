@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Perlin FBm
+  m_Shader: {fileID: 4800000, guid: d20c0528b734e404d94694e38f4923bf, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - amplitude: 2.45
+    - displacement: 1
+    - exponent: 1.67
+    - frequency: 2.8
+    - gain: 0.5
+    - lacunarity: 1.66
+    - local_offset_x: 0
+    - local_offset_z: 0
+    - multiplier: 1
+    - octaves: 5
+    - offset_x: 5.2
+    - offset_z: 28.71
+    - scale: 1.44
+    - wcoord: 2.9
+    - zcoord: 0
+    m_Colors: []
+  m_BuildTextureStacks: []
